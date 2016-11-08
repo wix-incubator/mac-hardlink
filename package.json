@@ -4,7 +4,8 @@
   "description": "Hardlinks on macOS",
   "main": "index.js",
   "scripts": {
-    "test": ":"
+    "test": ":",
+    "release": "npm version patch && npm publish && git push"
   },
   "repository": {
     "type": "git",
