@@ -1,17 +1,17 @@
 {
-  "name": "hardlink-recursive",
+  "name": "mac-hardlink",
   "version": "1.0.1",
   "description": "Hardlinks on macOS",
   "author": "Daniel Zlotin <zlotindaniel@gmail.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wix/hardlink-recursive.git"
+    "url": "git+https://github.com/wix/mac-hardlink.git"
   },
   "bugs": {
-    "url": "https://github.com/wix/hardlink-recursive/issues"
+    "url": "https://github.com/wix/mac-hardlink/issues"
   },
-  "homepage": "https://github.com/wix/hardlink-recursive#readme",
+  "homepage": "https://github.com/wix/mac-hardlink#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },

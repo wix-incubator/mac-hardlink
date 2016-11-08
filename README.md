@@ -1,2 +1,1 @@
-# hardlink-recursive
-Hardlinks on macOS
+# Hardlinks on macOS
