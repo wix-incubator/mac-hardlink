@@ -59,7 +59,6 @@ function unhardlink(file) {
 }
 
 function hardlink(from, to) {
-  console.log(`hardlinking ${from} to ${to}`);
   cp.execSync(`hln ${from} ${to}`);
 }
 
@@ -74,10 +73,12 @@ function hardlinkRecursively() {
 
     unhardlink(destFullPath);
     if (u) {
+      console.log(`unlinking ${destFullPath}`);
       return;
     }
 
     execSilently(`rm -rf ${destFullPath}`);
+    console.log(`hardlinking ${srcFullPath} to ${destFullPath}`);
     hardlink(srcFullPath, destFullPath);
   });
 }
