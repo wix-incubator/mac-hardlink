@@ -59,6 +59,7 @@ function unhardlink(file) {
 }
 
 function hardlink(from, to) {
+  console.log(`hardlinking ${from} to ${to}`);
   cp.execSync(`hln ${from} ${to}`);
 }
 
