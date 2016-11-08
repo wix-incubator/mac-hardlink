@@ -1,6 +1,6 @@
 {
   "name": "hardlink-recursive",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Hardlinks on macOS",
   "author": "Daniel Zlotin <zlotindaniel@gmail.com>",
   "license": "MIT",
