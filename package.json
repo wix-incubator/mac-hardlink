@@ -1,0 +1,25 @@
+{
+  "name": "hardlink-recursive",
+  "version": "1.0.0",
+  "description": "Hardlinks on macOS",
+  "main": "index.js",
+  "scripts": {
+    "test": ":"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wix/hardlink-recursive.git"
+  },
+  "author": "Daniel Zlotin <zlotindaniel@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wix/hardlink-recursive/issues"
+  },
+  "homepage": "https://github.com/wix/hardlink-recursive#readme",
+  "bin": {
+    "hardlink": "./bin/hardlink.js"
+  },
+  "dependencies": {
+    "lodash": "^4.0.0"
+  }
+}
