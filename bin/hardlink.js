@@ -3,11 +3,11 @@ const cp = require('child_process');
 const fs = require('fs');
 const _ = require('lodash');
 
+const unlinkOnly = _.find(process.argv, '-u');
 const source = process.argv[2];
 const dest = process.argv[3];
-const u = process.argv[4];
 
-let npmignoreLines;
+let npmignoreLines = [];
 const blacklist = ['node_modules', '.git', '.github', '.gradle', 'package.json', '.gitignore', '.npmignore', '.idea'];
 
 function ensureHLN() {
@@ -32,7 +32,11 @@ function ensureDestExists() {
 }
 
 function getNpmIgnore() {
-  const content = _.trim(fs.readFileSync(`${source}/.npmignore`));
+  const npmignorePath = `${source}/.npmignore`;
+  if (!fs.existsSync(npmignorePath)) {
+    return [];
+  }
+  const content = _.trim(fs.readFileSync(npmignorePath));
   return _.split(content, '\n');
 }
 
@@ -72,7 +76,7 @@ function hardlinkRecursively() {
     const destFullPath = `${dest}/${f}`;
 
     unhardlink(destFullPath);
-    if (u) {
+    if (unlinkOnly) {
       console.log(`unlinking ${destFullPath}`);
       return;
     }
@@ -83,10 +87,27 @@ function hardlinkRecursively() {
   });
 }
 
+function showHelp() {
+  if (_.find(process.argv, '-h')) {
+    console.log(`mac-hardlinks \
+    usage: 
+        hardlink [src] [dest] : link from src to dest \
+        hardlink [src] -u : unlink src`);
+    return true;
+  } else {
+    return false;
+  }
+}
+
 function run() {
+  if (showHelp()) {
+    return;
+  }
   assertSourceExists();
   ensureHLN();
-  ensureDestExists();
+  if (!unlinkOnly) {
+    ensureDestExists();
+  }
   npmignoreLines = getNpmIgnore();
   hardlinkRecursively();
 }
