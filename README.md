@@ -6,8 +6,10 @@
 
 ## Usage
 
+`hardlink -h`
+
 `hardlink <src-dir> <dest-dir>`
 
 or to unlink:
 
-`hardlink <src-dir> <dest-dir> u`
+`hardlink <dir> u`
