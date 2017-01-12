@@ -1,6 +1,6 @@
 {
   "name": "mac-hardlink",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Hardlinks on macOS",
   "author": "Daniel Zlotin <zlotindaniel@gmail.com>",
   "license": "MIT",
