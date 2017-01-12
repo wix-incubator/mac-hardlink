@@ -3,7 +3,8 @@ const cp = require('child_process');
 const fs = require('fs');
 const _ = require('lodash');
 
-const unlinkOnly = _.find(process.argv, '-u');
+const shouldShowHelp = _.includes(process.argv, '-h');
+const unlinkOnly = _.includes(process.argv, '-u');
 const source = process.argv[2];
 const dest = process.argv[3];
 
@@ -45,7 +46,7 @@ function shouldSkip(file) {
 }
 
 function isDefaultSkip(file) {
-  return _.find(blacklist, (n) => n === file);
+  return _.includes(blacklist, file);
 }
 
 function isInNpmIgnore(file) {
@@ -88,19 +89,19 @@ function hardlinkRecursively() {
 }
 
 function showHelp() {
-  if (_.find(process.argv, '-h')) {
-    console.log(`mac-hardlinks \
+  console.log(`
+  mac-hardlinks
+  
     usage: 
-        hardlink [src] [dest] : link from src to dest \
-        hardlink [src] -u : unlink src`);
-    return true;
-  } else {
-    return false;
-  }
+        hardlink [src] [dest]   : link from src to dest
+        hardlink [src] -u       : unlink src
+
+`);
 }
 
 function run() {
-  if (showHelp()) {
+  if (shouldShowHelp) {
+    showHelp();
     return;
   }
   assertSourceExists();
