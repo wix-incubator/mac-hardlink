@@ -1,22 +1,23 @@
 #!/usr/bin/env node
-const cp = require('child_process');
+const exec = require('shell-utils').exec;
 const fs = require('fs');
 const _ = require('lodash');
 
 const shouldShowHelp = _.includes(process.argv, '-h');
 const unlinkOnly = _.includes(process.argv, '-u');
+
 const source = process.argv[2];
-const dest = process.argv[3];
+const dest = unlinkOnly ? source : process.argv[3];
 
 let npmignoreLines = [];
 const blacklist = ['node_modules', '.git', '.github', '.gradle', 'package.json', '.gitignore', '.npmignore', '.idea'];
 
 function ensureHLN() {
   try {
-    cp.execSync(`which hln`);
+    exec.execSync(`which hln`);
   } catch (e) {
     console.log('hln does not exists. installing...');
-    cp.execSync(`brew install hardlink-osx`);
+    exec.execSync(`brew install hardlink-osx`);
   }
 }
 
@@ -55,16 +56,12 @@ function isInNpmIgnore(file) {
   });
 }
 
-function execSilently(cmd) {
-  cp.execSync(`${cmd} || true`, {stdio: ['ignore', 'ignore', 'ignore']});
-}
-
 function unhardlink(file) {
-  execSilently(`hln -u ${file}`);
+  exec.execSyncSilent(`hln -u ${file} || true`);
 }
 
 function hardlink(from, to) {
-  cp.execSync(`hln ${from} ${to}`);
+  exec.execSync(`hln ${from} ${to}`);
 }
 
 function hardlinkRecursively() {
@@ -78,11 +75,11 @@ function hardlinkRecursively() {
 
     unhardlink(destFullPath);
     if (unlinkOnly) {
-      console.log(`unlinking ${destFullPath}`);
+      console.log(`unlinking "${destFullPath}"`);
       return;
     }
 
-    execSilently(`rm -rf ${destFullPath}`);
+    exec.execSyncSilent(`rm -rf ${destFullPath} || true`);
     console.log(`hardlinking ${srcFullPath} to ${destFullPath}`);
     hardlink(srcFullPath, destFullPath);
   });
@@ -94,7 +91,7 @@ function showHelp() {
   
     usage: 
         hardlink [src] [dest]   : link from src to dest
-        hardlink [src] -u       : unlink src
+        hardlink [dest] -u      : unlink dest
 
 `);
 }
@@ -105,10 +102,10 @@ function run() {
     return;
   }
   assertSourceExists();
-  ensureHLN();
   if (!unlinkOnly) {
     ensureDestExists();
   }
+  ensureHLN();
   npmignoreLines = getNpmIgnore();
   hardlinkRecursively();
 }
