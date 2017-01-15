@@ -2,7 +2,6 @@
 const exec = require('shell-utils').exec;
 const fs = require('fs');
 const _ = require('lodash');
-const p = require('path');
 
 const shouldShowHelp = _.includes(process.argv, '-h');
 const unlinkOnly = _.includes(process.argv, '-u');
@@ -19,12 +18,6 @@ function ensureHLN() {
   } catch (e) {
     console.log('hln does not exists. installing...');
     exec.execSync(`brew install hardlink-osx`);
-  }
-}
-
-function assertSourceExists() {
-  if (!fs.existsSync(source)) {
-    throw new Error(`${source} does not exist`);
   }
 }
 
@@ -102,7 +95,10 @@ function run() {
     showHelp();
     return;
   }
-  assertSourceExists();
+  if (!fs.existsSync(source)) {
+    console.log(`hardlink: "${source}" does not exists`);
+    return;
+  }
   if (!unlinkOnly) {
     ensureDestExists();
   }
