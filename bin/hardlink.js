@@ -10,7 +10,7 @@ const unlinkOnly = _.includes(process.argv, '-u');
 const source = process.argv[2];
 const dest = unlinkOnly ? source : process.argv[3];
 
-let npmignoreLines = [];
+let gitignoreLines = [];
 const blacklist = ['node_modules', '.git', '.github', '.gradle', 'package.json', '.gitignore', '.npmignore', '.idea'];
 
 function ensureHLN() {
@@ -34,25 +34,25 @@ function ensureDestExists() {
   }
 }
 
-function getNpmIgnore() {
-  const npmignorePath = `${source}/.npmignore`;
-  if (!fs.existsSync(npmignorePath)) {
+function getGitIgnore() {
+  const gitignorePath = `${source}/.gitignore`;
+  if (!fs.existsSync(gitignorePath)) {
     return [];
   }
-  const content = _.trim(fs.readFileSync(npmignorePath));
+  const content = _.trim(fs.readFileSync(gitignorePath));
   return _.split(content, '\n');
 }
 
 function shouldSkip(file) {
-  return isDefaultSkip(file) || isInNpmIgnore(file);
+  return isDefaultSkip(file) || isInGitIgnore(file);
 }
 
 function isDefaultSkip(file) {
   return _.includes(blacklist, file);
 }
 
-function isInNpmIgnore(file) {
-  return _.find(npmignoreLines, (line) => {
+function isInGitIgnore(file) {
+  return _.find(gitignoreLines, (line) => {
     return file === line || fs.statSync(`${source}/${file}`).isDirectory() ? new RegExp(line).exec(`${file}/`) : new RegExp(line).exec(file);
   });
 }
@@ -107,7 +107,7 @@ function run() {
     ensureDestExists();
   }
   ensureHLN();
-  npmignoreLines = getNpmIgnore();
+  gitignoreLines = getGitIgnore();
   hardlinkRecursively();
 }
 
