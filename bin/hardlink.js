@@ -71,12 +71,12 @@ function hardlinkRecursively() {
       return;
     }
 
-    const srcFullPath = p.resolve(`${source}/${f}`);
-    const destFullPath = p.resolve(`${dest}/${f}`);
+    const srcFullPath = `${source}/${f}`;
+    const destFullPath = `${dest}/${f}`;
 
     unhardlink(destFullPath);
     if (unlinkOnly) {
-      console.log(`unlinking "${destFullPath}"`);
+      console.log(`unlinking ${f}`);
       return;
     }
 
