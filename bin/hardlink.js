@@ -2,6 +2,7 @@
 const exec = require('shell-utils').exec;
 const fs = require('fs');
 const _ = require('lodash');
+const p = require('path');
 
 const shouldShowHelp = _.includes(process.argv, '-h');
 const unlinkOnly = _.includes(process.argv, '-u');
@@ -70,8 +71,8 @@ function hardlinkRecursively() {
       return;
     }
 
-    const srcFullPath = `${source}/${f}`;
-    const destFullPath = `${dest}/${f}`;
+    const srcFullPath = p.resolve(`${source}/${f}`);
+    const destFullPath = p.resolve(`${dest}/${f}`);
 
     unhardlink(destFullPath);
     if (unlinkOnly) {
