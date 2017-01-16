@@ -2,6 +2,7 @@
 const exec = require('shell-utils').exec;
 const fs = require('fs');
 const _ = require('lodash');
+const p = require('path');
 
 const shouldShowHelp = _.includes(process.argv, '-h');
 const unlinkOnly = _.includes(process.argv, '-u');
@@ -23,7 +24,7 @@ function ensureHLN() {
 
 function ensureDestExists() {
   if (!fs.existsSync(dest)) {
-    fs.mkdirSync(dest);
+    exec.execSync(`mkdir -p ${dest}`);
   }
 }
 
@@ -66,6 +67,12 @@ function hardlinkRecursively() {
 
     const srcFullPath = `${source}/${f}`;
     const destFullPath = `${dest}/${f}`;
+
+    const rs = p.resolve(process.cwd(), srcFullPath);
+    const rd = p.resolve(process.cwd(), destFullPath);
+    if (_.includes(rd, rs)) { //avoid infinite recursion
+      return;
+    }
 
     unhardlink(destFullPath);
     if (unlinkOnly) {
