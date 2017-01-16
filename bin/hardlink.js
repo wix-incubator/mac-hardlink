@@ -56,7 +56,7 @@ function unhardlink(file) {
 }
 
 function hardlink(from, to) {
-  exec.execSync(`hln ${from} ${to}`);
+  exec.execSyncSilent(`hln ${from} ${to}`);
 }
 
 function hardlinkRecursively() {
@@ -71,6 +71,7 @@ function hardlinkRecursively() {
     const rs = p.resolve(process.cwd(), srcFullPath);
     const rd = p.resolve(process.cwd(), destFullPath);
     if (_.includes(rd, rs)) { //avoid infinite recursion
+      console.log(`skipping ${f}`);
       return;
     }
 
@@ -81,7 +82,7 @@ function hardlinkRecursively() {
     }
 
     exec.execSyncSilent(`rm -rf ${destFullPath} || true`);
-    console.log(`hardlinking ${srcFullPath} to ${destFullPath}`);
+    console.log(`hardlinking ${f}`);
     hardlink(srcFullPath, destFullPath);
   });
 }
