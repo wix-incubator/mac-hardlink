@@ -42,12 +42,16 @@ function shouldSkip(file) {
 }
 
 function isDefaultSkip(file) {
-  return _.includes(blacklist, file);
+  return _.includes(blacklist, file) || _.startsWith(file, '.');
 }
 
 function isInGitIgnore(file) {
   return _.find(gitignoreLines, (line) => {
-    return file === line || fs.statSync(`${source}/${file}`).isDirectory() ? new RegExp(line).exec(`${file}/`) : new RegExp(line).exec(file);
+    try {
+      return file === line || fs.statSync(`${source}/${file}`).isDirectory() ? new RegExp(line).exec(`${file}/`) : new RegExp(line).exec(file);
+    } catch (e) {
+      return false;
+    }
   });
 }
 
@@ -65,19 +69,15 @@ function hardlinkRecursively() {
       return;
     }
 
-    const srcFullPath = `${source}/${f}`;
-    const destFullPath = `${dest}/${f}`;
-
-    const rs = p.resolve(process.cwd(), srcFullPath);
-    const rd = p.resolve(process.cwd(), destFullPath);
-    if (_.includes(rd, rs)) { //avoid infinite recursion
-      console.log(`skipping ${f}`);
-      return;
-    }
+    const srcFullPath = p.resolve(process.cwd(), `${source}/${f}`);
+    const destFullPath = p.resolve(process.cwd(), `${dest}/${f}`);
 
     unhardlink(destFullPath);
     if (unlinkOnly) {
       console.log(`unlinking ${f}`);
+      return;
+    } else if (_.includes(destFullPath, srcFullPath)) { //avoid infinite recursion
+      console.log(`skipping ${f}`);
       return;
     }
 
