@@ -12,4 +12,4 @@
 
 or to unlink:
 
-`hardlink <dir> u`
+`hardlink <dir> -u`
