@@ -18,13 +18,17 @@
   "main": "index.js",
   "scripts": {
     "test": ":",
-    "release": "npm version patch && npm publish && git push"
+    "release": "npm version patch && npm publish && git push",
+    "snyk-protect": "snyk protect",
+    "prepare": "yarn run snyk-protect"
   },
   "bin": {
     "hardlink": "./bin/hardlink.js"
   },
   "dependencies": {
     "lodash": "4.x.x",
-    "shell-utils": "1.x.x"
-  }
+    "shell-utils": "1.x.x",
+    "snyk": "^1.317.0"
+  },
+  "snyk": true
 }
