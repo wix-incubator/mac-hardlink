@@ -24,7 +24,7 @@
     "hardlink": "./bin/hardlink.js"
   },
   "dependencies": {
-    "lodash": "4.x.x",
+    "lodash": "4.17.16",
     "shell-utils": "1.x.x"
   }
 }
